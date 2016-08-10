@@ -27,39 +27,16 @@
       window.location = '<%= root_path %>';
   <% end %>
 <% else %>
-  <% if @time_overlap == 'full_overlap' %>
-    $('#dialog_overlap').dialog({
-      autoOpen: false,
-      modal: true
-    });
-    $('#dialog_overlap').dialog('open');
-
-  <% else %>
-    $('#dialog_overlap_confirm').dialog({
-      autoOpen: false,
-      modal: true
-    });
-    $('#dialog_overlap_confirm').dialog({
+  $('#dialog_overlap_confirm').dialog({
     buttons : {
-      'Confirm' : function() {
+      'Continue' : function() {
         $('#end-date-repeat').val('<%= @time_overlap %>');
-        var form =  $('#new_event');
-        $.ajax({
-          type: 'POST',
-          url: '/events',
-          dataType: 'script',
-          data: $(form).serialize(),
-          success: function(data) {
-            $('#dialog_overlap_confirm').dialog('close');
-          }
-        });
         window.location = '<%= root_path %>';
       },
       'Cancel' : function() {
         $(this).dialog('close');
       }
     }
-    });
-    $('#dialog_overlap_confirm').dialog('open');
-  <% end %>
+  });
+  $('#dialog_overlap_confirm').dialog('open');
 <% end %>

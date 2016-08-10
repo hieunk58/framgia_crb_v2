@@ -35,8 +35,6 @@ class EventsController < ApplicationController
   end
 
   def create
-    create_place_when_add_location
-
     modify_repeat_params if params[:repeat].nil?
     @event = current_user.events.new event_params
     place = Place.find_by name: event_params[:name_place]
@@ -45,31 +43,26 @@ class EventsController < ApplicationController
     event_overlap = EventOverlap.new(@event)
     if event_overlap.overlap?
       @time_overlap = load_overlap_time(event_overlap)
-      respond_to do |format|
-        format.html {redirect_to :back}
-        format.js
-      end
-    else
-      respond_to do |format|
-        if @event.save
-          ChatworkServices.new(@event).perform
-          NotificationDesktopService.new(@event, Settings.create_event).perform
+    end
+    respond_to do |format|
+      if @event.save
+        ChatworkServices.new(@event).perform
+        NotificationDesktopService.new(@event, Settings.create_event).perform
 
-          if @event.repeat_type.present?
-            FullcalendarService.new.generate_event_delay @event
-          else
-            NotificationEmailService.new(@event).perform
-          end
-          NotificationDesktopJob.new(@event, Settings.start_event).perform
-
-          flash[:success] = t "events.flashs.created"
-          format.html {redirect_to root_path}
-          format.js {@data = @event.json_data(current_user.id)}
+        if @event.repeat_type.present?
+          FullcalendarService.new.generate_event_delay @event
         else
-          flash[:error] = t "events.flashs.not_created"
-          format.html {redirect_to new_event_path}
-          format.js
+          NotificationEmailService.new(@event).perform
         end
+        NotificationDesktopJob.new(@event, Settings.start_event).perform
+
+        flash[:success] = t "events.flashs.created"
+        format.html {redirect_to root_path}
+        format.js {@data = @event.json_data(current_user.id)}
+      else
+        flash[:error] = t "events.flashs.not_created"
+        format.html {redirect_to new_event_path}
+        format.js
       end
     end
   end
@@ -109,10 +102,10 @@ class EventsController < ApplicationController
     event = Event.new handle_event_params
     event.parent_id = @event.parent? ? @event.id : @event.parent_id
     event.calendar_id = @event.calendar_id
-
     respond_to do |format|
       if @overlap_when_update = overlap_when_update?(event)
-        flash[:error] = t "events.flashs.not_updated_because_overlap"
+        EventExceptionService.new(@event, params, {}).update_event_exception
+        flash[:error] = t "events.flashs.updated_with_overlap"
         format.js
       else
         EventExceptionService.new(@event, params, {}).update_event_exception

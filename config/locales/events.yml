@@ -11,7 +11,7 @@ en:
       not_created: "Event was't create."
       updated: "Event was updated successfully."
       not_updated: "Event wasn't updated."
-      not_updated_because_overlap: "Event wasn't updated because of overlap."
+      updated_with_overlap: "Event was updated but it overlaps other events."
       deleted: "Event deleted"
       not_deleted: "Event wasn't delete."
       delete_attendee: "Attendee deleted"
@@ -143,5 +143,5 @@ en:
       remind_edit_all_following_event: "All The Following Events is edited"
     overlap:
       fulloverlap: "Event Overlap!"
-      do_you_want_create: "Event overlap! Do you want create?"
+      do_you_want_create: "Event overlap! Do you want to continue?"
     datetime: "%m-%d-%Y %H:%M %p"

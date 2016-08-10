@@ -95,8 +95,8 @@ class Event < ActiveRecord::Base
     where "old_exception_type = ?", Event.exception_types[:edit_all_follow]
   end
 
-  scope :events_in_place, ->calendar_id, place_id do
-    where "calendar_id = ? AND place_id = ?", calendar_id, place_id
+  scope :events_in_place, ->calendar_id, name_place do
+    where "calendar_id = ? AND name_place = ?", calendar_id, name_place
   end
 
   class << self

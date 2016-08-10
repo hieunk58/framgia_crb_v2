@@ -26,7 +26,6 @@ class Api::EventsController < ApplicationController
     else
       @events = Event.in_calendars params[:calendars]
       @events = FullcalendarService.new(@events).repeat_data
-
       if params[:calendars].present?
         render json: {
           message: t("api.request_success"),
@@ -80,7 +79,7 @@ class Api::EventsController < ApplicationController
 
     if overlap_when_update? event
       render json: {
-        text: t("events.flashs.not_updated_because_overlap")
+        text: t("events.flashs.updated_with_overlap")
       }, status: :bad_request
     else
       exception_service = EventExceptionService.new(handle_event, params, argv)
