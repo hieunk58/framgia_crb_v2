@@ -57,12 +57,12 @@
           </span>
         </div>
       </div>
-      <div class="tile-content">
+      <div class="form-group">
         <span class="label label-default">
           <%= t "calendar.place" %>
         </span>
         <% if @event.name_place.present? %>
-          <select class="select2-single js-states gcal-textinput form-control"
+          <select class="select2-single form-control"
             id="id_label_single" name="event[name_place]"
             value="<%= @event.name_place %>">
             <% unless @places.include? @event.name_place%>
@@ -71,14 +71,14 @@
               </option>
             <% end %>
             <% @places.each do |place| %>
-              <option <%= "selected" if @event.name_place == place.name %>
+              <option selected="<%= "selected" if @event.name_place == place.name %>"
                 value="<%= place.name %>">
                 <%= place.name %>
-              </option>
+              <option>
             <% end %>
           </select>
         <% else %>
-          <select class="select2-single create js-states gcal-textinput form-control"
+          <select class="select2-single form-control"
             id="id_label_single" name="event[name_place]"
             value="<%= @event.name_place %>">
             <% @places.each do |place| %>

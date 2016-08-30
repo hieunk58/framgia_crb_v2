@@ -141,15 +141,19 @@ $(document).on('page:change', function(){
 
   function showDialog(dialogId) {
     var dialog = $('#' + dialogId);
-    $(dialog).removeClass('dialog-hidden');
-    $(dialog).addClass('dialog-visible');
+    $(dialog).removeClass('dialog-hidden').addClass('dialog-visible');
     $('.overlay-bg').show().css({'height' : docHeight});
   }
-
+  //loi click o ham nay neu bo ham nay di thi chay dc nhung ko dong dc
   hiddenDialog = function(dialogId) {
     var dialog = $('#' + dialogId);
-    $(dialog).addClass('dialog-hidden');
-    $(dialog).removeClass('dialog-visible');
+    if(dialogId === 'new-event-dialog'){
+      $('.select2-search__field').click(function() {
+        
+      });      
+    }
+
+    $(dialog).addClass('dialog-hidden').removeClass('dialog-visible');     
   }
 
   function clearDialog() {
